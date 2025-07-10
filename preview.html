@@ -3,11 +3,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Preview Submission</title>
+  <title>Real GET Preview</title>
 </head>
 <body>
-
-  <h2>Preview of Your Submission</h2>
+  <h2>GET Preview of Your Submission</h2>
 
   <div id="previewBox">
     <p><strong>Name:</strong> <span id="previewName"></span></p>
@@ -19,10 +18,7 @@
   </div>
 
   <script>
-    // Parse query string from URL
     const params = new URLSearchParams(window.location.search);
-
-    // Inject values into the preview box
     document.getElementById("previewName").textContent = params.get("name") || "Not provided";
     document.getElementById("previewEmail").textContent = params.get("email") || "Not provided";
     document.getElementById("previewPhone").textContent = params.get("phone") || "Not provided";
@@ -30,6 +26,6 @@
     document.getElementById("previewContact").textContent = params.get("contact") || "Not selected";
     document.getElementById("previewInquiry").textContent = params.get("inquiry") || "Not selected";
   </script>
-
 </body>
 </html>
+
