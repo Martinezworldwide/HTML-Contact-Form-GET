@@ -1,58 +1,231 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Contact Form</title>
+  <title>Contact Us</title>
+
+  <!-- ✅ Styling the form layout -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+
+    .radio-group {
+      margin-top: 10px;
+    }
+
+    .radio-group label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+
+    #previewBox {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 20px;
+      display: none;
+      background-color: #f9f9f9;
+    }
+  </style>
 </head>
+
 <body>
 
-  <h2>Contact Us (GET Preview)</h2>
+  <h2>Contact Us</h2>
 
-  <form action="preview.html" method="GET">
+  <!-- ✅ Main Form: Sends to Formspree via POST -->
+  <form
+    id="contactForm"
+    method="POST"
+    action="https://formspree.io/f/xdkzqaqe"
+    onsubmit="return validateForm();"
+  >
+
+    <!-- Required text inputs -->
     <label>
       Name:
-      <input type="text" name="name" required>
+      <input type="text" id="name" name="name" required>
+      <span class="error" id="errorName"></span>
     </label>
-    <br><br>
 
     <label>
       Email:
-      <input type="email" name="email" required>
+      <input type="email" id="email" name="email" required>
+      <span class="error" id="errorEmail"></span>
     </label>
-    <br><br>
 
     <label>
-      Phone:
-      <input type="text" name="phone" pattern="\d{10}" required>
+      Phone Number:
+      <input type="text" id="phone" name="phone" required>
+      <span class="error" id="errorPhone"></span>
     </label>
-    <br><br>
 
     <label>
       Message:
-      <textarea name="message" rows="4" required></textarea>
+      <textarea id="message" name="message" rows="4" required></textarea>
+      <span class="error" id="errorMessage"></span>
     </label>
-    <br><br>
 
-    <p>Preferred Contact Method:</p>
-    <label><input type="radio" name="contact" value="Email" required> Email</label>
-    <label><input type="radio" name="contact" value="Phone"> Phone</label>
-    <label><input type="radio" name="contact" value="Both"> Both</label>
-    <br><br>
+    <!-- Radio button options -->
+    <div class="radio-group">
+      Preferred Contact Method:
+      <label><input type="radio" name="contact" value="Email" required> Email</label>
+      <label><input type="radio" name="contact" value="Phone"> Phone</label>
+      <label><input type="radio" name="contact" value="Both"> Both</label>
+    </div>
 
+    <!-- Dropdown menu -->
     <label>
       Inquiry Type:
-      <select name="inquiry" required>
-        <option value="">Select one</option>
+      <select name="inquiry" id="inquiry" required>
+        <option value="">Select an option</option>
         <option value="General Inquiry">General Inquiry</option>
         <option value="Support Request">Support Request</option>
         <option value="Feedback">Feedback</option>
       </select>
     </label>
+
     <br><br>
 
-    <input type="submit" value="Preview Form (GET)">
+    <!-- Simulated GET preview (inline) -->
+    <button type="button" onclick="previewForm()">Preview (Simulated GET)</button>
+
+    <!-- POST submit to Formspree -->
+    <input type="submit" value="Submit (POST)">
+  </form> <!-- ✅ Close main form -->
+
+  <!-- ✅ Real GET Preview Form (separate form outside main POST form) -->
+  <form id="realPreviewForm" action="preview.html" method="GET" target="_blank">
+    <!-- Hidden fields for GET query -->
+    <input type="hidden" name="name" id="realName">
+    <input type="hidden" name="email" id="realEmail">
+    <input type="hidden" name="phone" id="realPhone">
+    <input type="hidden" name="message" id="realMessage">
+    <input type="hidden" name="contact" id="realContact">
+    <input type="hidden" name="inquiry" id="realInquiry">
+
+    <!-- Real GET preview triggers URL parameters to preview.html -->
+    <button type="button" onclick="triggerRealGET()">Preview (Real GET)</button>
   </form>
+
+  <!-- 🔍 Inline Preview Box (for Simulated GET Preview) -->
+  <div id="previewBox">
+    <h3>Preview:</h3>
+    <p><strong>Name:</strong> <span id="previewName"></span></p>
+    <p><strong>Email:</strong> <span id="previewEmail"></span></p>
+    <p><strong>Phone:</strong> <span id="previewPhone"></span></p>
+    <p><strong>Message:</strong> <span id="previewMessage"></span></p>
+    <p><strong>Contact Method:</strong> <span id="previewContact"></span></p>
+    <p><strong>Inquiry Type:</strong> <span id="previewInquiry"></span></p>
+  </div>
+
+  <!-- ✅ JavaScript logic for validation + preview -->
+  <script>
+    // Validation for all fields before submission or preview
+    function validateForm() {
+      document.querySelectorAll('.error').forEach(e => e.textContent = '');
+      let valid = true;
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (name === "") {
+        document.getElementById("errorName").textContent = "Name is required.";
+        valid = false;
+      }
+
+      if (email === "") {
+        document.getElementById("errorEmail").textContent = "Email is required.";
+        valid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById("errorEmail").textContent = "Invalid email format.";
+        valid = false;
+      }
+
+      if (phone === "") {
+        document.getElementById("errorPhone").textContent = "Phone number is required.";
+        valid = false;
+      } else if (!/^\d{10}$/.test(phone)) {
+        document.getElementById("errorPhone").textContent = "Phone must be 10 digits.";
+        valid = false;
+      }
+
+      if (message === "") {
+        document.getElementById("errorMessage").textContent = "Message is required.";
+        valid = false;
+      }
+
+      return valid;
+    }
+
+    // Simulated GET preview displayed in <div> below form
+    function previewForm() {
+      if (!validateForm()) {
+        document.getElementById("previewBox").style.display = "none";
+        return;
+      }
+
+      document.getElementById("previewName").textContent = document.getElementById("name").value;
+      document.getElementById("previewEmail").textContent = document.getElementById("email").value;
+      document.getElementById("previewPhone").textContent = document.getElementById("phone").value;
+      document.getElementById("previewMessage").textContent = document.getElementById("message").value;
+      document.getElementById("previewInquiry").textContent = document.getElementById("inquiry").value;
+
+      const contactRadios = document.getElementsByName("contact");
+      let selectedContact = "";
+      for (const radio of contactRadios) {
+        if (radio.checked) {
+          selectedContact = radio.value;
+          break;
+        }
+      }
+      document.getElementById("previewContact").textContent = selectedContact;
+      document.getElementById("previewBox").style.display = "block";
+    }
+
+    // Real GET Preview: opens preview.html with query parameters
+    function triggerRealGET() {
+      if (!validateForm()) return;
+
+      document.getElementById("realName").value = document.getElementById("name").value;
+      document.getElementById("realEmail").value = document.getElementById("email").value;
+      document.getElementById("realPhone").value = document.getElementById("phone").value;
+      document.getElementById("realMessage").value = document.getElementById("message").value;
+      document.getElementById("realInquiry").value = document.getElementById("inquiry").value;
+
+      const radios = document.getElementsByName("contact");
+      for (const radio of radios) {
+        if (radio.checked) {
+          document.getElementById("realContact").value = radio.value;
+          break;
+        }
+      }
+
+      document.getElementById("realPreviewForm").submit();
+    }
+  </script>
 
 </body>
 </html>
