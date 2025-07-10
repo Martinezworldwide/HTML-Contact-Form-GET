@@ -1,0 +1,35 @@
+<!-- preview.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Preview Submission</title>
+</head>
+<body>
+
+  <h2>Preview of Your Submission</h2>
+
+  <div id="previewBox">
+    <p><strong>Name:</strong> <span id="previewName"></span></p>
+    <p><strong>Email:</strong> <span id="previewEmail"></span></p>
+    <p><strong>Phone:</strong> <span id="previewPhone"></span></p>
+    <p><strong>Message:</strong> <span id="previewMessage"></span></p>
+    <p><strong>Preferred Contact Method:</strong> <span id="previewContact"></span></p>
+    <p><strong>Inquiry Type:</strong> <span id="previewInquiry"></span></p>
+  </div>
+
+  <script>
+    // Parse query string from URL
+    const params = new URLSearchParams(window.location.search);
+
+    // Inject values into the preview box
+    document.getElementById("previewName").textContent = params.get("name") || "Not provided";
+    document.getElementById("previewEmail").textContent = params.get("email") || "Not provided";
+    document.getElementById("previewPhone").textContent = params.get("phone") || "Not provided";
+    document.getElementById("previewMessage").textContent = params.get("message") || "Not provided";
+    document.getElementById("previewContact").textContent = params.get("contact") || "Not selected";
+    document.getElementById("previewInquiry").textContent = params.get("inquiry") || "Not selected";
+  </script>
+
+</body>
+</html>
